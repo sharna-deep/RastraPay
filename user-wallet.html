@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px 20px 80px 20px;
+            position: relative;
+        }
+
+        /* Previous styles remain the same */
+        .wallet-header {
+            background: url('https://www.shutterstock.com/shutterstock/videos/1065812323/thumb/6.jpg?ip=x480') center/cover;
+            height: 200px;
+            border-radius: 12px;
+            position: relative;
+            top: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .balance {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .balance-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .recharge-button {
+            background-color: #141414;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1rem;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+
+        .amount-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .amount-option {
+            flex: 1;
+            padding: 16px;
+            background-color: #141414;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .amount-option.selected {
+            background-color: #333;
+        }
+
+        .input-field {
+            background-color: #1a1a1a;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .card-details {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card-details input {
+            flex: 1;
+        }
+
+        .auto-recharge {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .toggle {
+            width: 50px;
+            height: 28px;
+            background-color: #333;
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .toggle.active::after {
+            transform: translateX(22px);
+        }
+
+        .recharge-info {
+            margin-top: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* New Navigation Bar Styles */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #1E1E1E;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #333;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 0.75rem;
+            padding: 4px 0;
+        }
+
+        .nav-icon {
+            margin-bottom: 4px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-text {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .nav-item.active .nav-text {
+            color: #fff;
+        }
+
+        .nav-item.active svg {
+            fill: #fff;
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+            fill: #888;
+        }
+    </style>
+</head>
+<body>
+    <!-- Previous body content remains the same -->
+    <div class="header">
+        <h1>Unipay</h1>
+    </div>
+    <div class="wallet-header">
+        <div class="balance">₹5,000</div>
+        <div class="balance-label">Available Balance</div>
+    </div>
+
+    <button class="recharge-button">Recharge Wallet</button>
+
+    <div class="amount-options">
+        <button class="amount-option">₹100</button>
+        <button class="amount-option selected">₹200</button>
+    </div>
+
+    <input type="text" class="input-field" placeholder="Name">
+    <input type="text" class="input-field" placeholder="Card number">
+
+    <div class="card-details">
+        <input type="text" class="input-field" placeholder="Exp">
+        <input type="text" class="input-field" placeholder="CVV">
+        <input type="text" class="input-field" placeholder="Zip">
+    </div>
+
+    <button class="recharge-button">Proceed to Recharge</button>
+
+    <div class="auto-recharge">
+        <span>Auto-Recharge</span>
+        <div class="toggle"></div>
+    </div>
+
+    <div class="recharge-info">
+        <div class="info-row">
+            <span>Minimum Balance</span>
+            <span>₹100</span>
+        </div>
+        <div class="info-row">
+            <span>Recharge Amount</span>
+            <span>₹200</span>
+        </div>
+    </div>
+
+    <!-- New Navigation Bar -->
+    <nav class="nav-bar">
+        <a href="user-home.html" nav-item active">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </div>
+            <span class="nav-text">Home</span>
+        </a>
+        <a href="user-wallet.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                </svg>
+            </div>
+            <span class="nav-text">Wallet</span>
+        </a>
+        <a href="user-transaction.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+            </div>
+            <span class="nav-text">Transactions</span>
+        </a>
+        <a href="user-setting.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                </svg>
+            </div>
+            <span class="nav-text">Settings</span>
+        </a>
+    </nav>
+
+
+    <script>
+        const toggle = document.querySelector('.toggle');
+        const amountOptions = document.querySelectorAll('.amount-option');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('active');
+        });
+
+        amountOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                amountOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(navItem => navItem.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

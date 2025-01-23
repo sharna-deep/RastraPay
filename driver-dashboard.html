@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            font-weight: bold;
+        }
+
+        .dashboard-card {
+            background-color: #141414;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: transform 0.2s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-subtitle {
+            color: #888;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .amount {
+            font-size: 4rem;
+            font-weight: bold;
+        }
+
+        .payment-form {
+            margin-top: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        input[type="number"] {
+            flex: 1;
+            padding: 1rem;
+            font-size: 1rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 0.5rem;
+            color: white;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            background: #ffffff;
+            color: #141414;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        #payment-history {
+            margin-top: 1rem;
+        }
+
+        .payment-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <h1>Driver Dashboard</h1>
+    
+    <div class="dashboard-card">
+        <h2 class="card-title">Daily Fare Collection</h2>
+        <p class="card-subtitle">Total fares collected today</p>
+        <div class="amount">₹ <span id="daily-total">0</span></div>
+
+
+        <div id="payment-history"></div>
+    </div>
+
+    <script>
+        let dailyTotal = 0;
+        const dailyTotalElement = document.getElementById('daily-total');
+        const paymentHistory = document.getElementById('payment-history');
+
+        function addPayment() {
+            const amount = parseFloat(document.getElementById('payment-amount').value);
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            // Update daily total
+            dailyTotal += amount;
+            dailyTotalElement.textContent = dailyTotal.toFixed(2);
+
+            // Add payment to history
+            const timestamp = new Date().toLocaleTimeString();
+            const paymentItem = document.createElement('div');
+            paymentItem.className = 'payment-item';
+            paymentItem.innerHTML = `
+                <span>Payment received at ${timestamp}</span>
+                <span>$${amount.toFixed(2)}</span>
+            `;
+            paymentHistory.insertBefore(paymentItem, paymentHistory.firstChild);
+
+            // Clear input
+            document.getElementById('payment-amount').value = '';
+
+            // Animation effect
+            animateTotal(dailyTotal - amount, dailyTotal);
+        }
+
+        function animateTotal(start, end) {
+            const duration = 1000; // 1 second
+            const steps = 60;
+            const increment = (end - start) / steps;
+            let current = start;
+            let step = 0;
+
+            const timer = setInterval(() => {
+                step++;
+                current += increment;
+                dailyTotalElement.textContent = current.toFixed(2);
+
+                if (step >= steps) {
+                    clearInterval(timer);
+                    dailyTotalElement.textContent = end.toFixed(2);
+                }
+            }, duration / steps);
+        }
+
+        // Reset daily total at midnight
+        function checkDayReset() {
+            const now = new Date();
+            if (now.getHours() === 0 && now.getMinutes() === 0) {
+                dailyTotal = 0;
+                dailyTotalElement.textContent = '0.00';
+                paymentHistory.innerHTML = '';
+            }
+        }
+
+        // Check for day reset every minute
+        setInterval(checkDayReset, 60000);
+    </script>
+</body>
+</html>

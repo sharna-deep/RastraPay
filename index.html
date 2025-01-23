@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .language-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .main-content {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .welcome-subtitle {
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: #fff;
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-button:active {
+            transform: scale(0.98);
+        }
+
+        .signup-text {
+            color: #888;
+            margin-top: 32px;
+            font-size: 14px;
+        }
+
+        .signup-link {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="#" class="logo">Unipay</a>
+    </header>
+
+    <div class="main-content">
+        <h1 class="welcome-title">Welcome to Unipay</h1>
+        <p class="welcome-subtitle">Seamless Transactions for Everyone, Everywhere</p>
+
+        <a href="shopkeeper-login.html">
+        <button class="login-button">Shopkeeper Login</button>
+        </a>
+        <a href="driver-login.html">
+        <button class="login-button">Driver Login</button>
+        </a>
+        <a href="user-login.html">
+        <button class="login-button">User Login</button>
+        </a>   
+        <p class="signup-text">
+            Don't have an account?
+            <a href="#" class="signup-link">Sign up</a>
+        </p>
+    </div>
+
+    <script>
+        const themeToggle = document.querySelector('.theme-toggle');
+        const buttons = document.querySelectorAll('.login-button');
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+        });
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Add ripple effect or animation here if needed
+                console.log(`${button.textContent} clicked`);
+            });
+        });
+
+        document.querySelector('.language-select').addEventListener('change', (e) => {
+            console.log(`Language changed to ${e.target.value}`);
+        });
+    </script>
+</body>
+</html>
