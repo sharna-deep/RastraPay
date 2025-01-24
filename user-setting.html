@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        a {
+    text-decoration: none;
+}
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #141414;
+            color: #ffffff;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .notification-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background-color: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 4px;
+            font-size: 10px;
+            min-width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            min-width: 300px;
+            max-width: 400px;
+            display: none;
+            z-index: 1000;
+            margin-top: 8px;
+        }
+
+        .notification-dropdown.show {
+            display: block;
+        }
+
+        .notification-header {
+            padding: 16px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .notification-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 16px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background-color: #222;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .profile-image {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            top: 12px;
+        }
+
+        .profile-info {
+            flex-grow: 1;
+            position: relative;
+            top: 15px;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .section-label {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            color: #888;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .primary-button {
+            background-color: #45a049;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .secondary-button {
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .bank-section {
+            background-color: #1a1a1a;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .bank-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .bank-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .bank-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .bank-account {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #1E1E1E;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #333;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .nav-icon {
+            margin-bottom: 4px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item.active {
+            color: #45a049;
+        }
+
+        .nav-item.active svg {
+            fill: #45a049;
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+            fill: #888;
+        }
+
+        .main-section {
+            position: relative;
+            top: 20px;
+        }
+
+        .settings-container {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    top: 20px;
+}
+
+.settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #333;
+}
+
+.settings-item:last-child {
+    border-bottom: none;
+}
+
+.item-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.item-left i {
+    font-size: 20px;
+    width: 24px;
+    color: #888;
+}
+
+.item-left span {
+    font-size: 16px;
+}
+
+.arrow {
+    color: #888;
+    font-size: 14px;
+}
+
+/* Toggle Switch Styles */
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #484848;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-switch label:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + label {
+    background-color: #45a049;
+}
+
+.toggle-switch input:checked + label:before {
+    transform: translateX(24px);
+}
+
+/* Hover Effects */
+.settings-item:hover {
+    background-color: #242424;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Active/Pressed State */
+.settings-item:active {
+    background-color: #2a2a2a;
+}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="#" class="logo">RastraPay</a>
+    <div class="notification-icon" id="notificationIcon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+        </svg>
+        <span class="notification-badge">3</span>
+        <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+                <span class="notification-title">Notifications</span>
+            </div>
+            <div class="notification-list">
+                <div class="notification-item">
+                    <div class="notification-content">
+                        <div class="notification-message">New payment received from John Doe</div>
+                        <div class="notification-time">2 minutes ago</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-content">
+                        <div class="notification-message">Your account has been verified</div>
+                        <div class="notification-time">1 hour ago</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-content">
+                        <div class="notification-message">System maintenance scheduled for tomorrow</div>
+                        <div class="notification-time">2 hours ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </header>
+    <span class="main-section">
+        <div class="profile-header">
+            <img src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="Profile" class="profile-image">
+            <div class="profile-info">
+                <div class="profile-name">Sharnadeep Dey</div>
+                <div class="profile-email">sharnadeep009@gmail.com</div>
+            </div>
+        </div>
+
+        <div class="section-label">Phone Number</div>
+        <div class="info-value">6296332168</div>
+
+        <div class="button-group">
+            <button class="primary-button">Edit Profile</button>
+            <button class="secondary-button">Change Password</button>
+        </div>
+
+        <div class="bank-section">
+            <div class="bank-header">
+                <img src="https://placehold.co/100x100" alt="Bank" class="bank-icon">
+                <div class="bank-info">
+                    <div class="bank-title">Linked Bank Account</div>
+                    <div class="bank-account">Bank of India - ****1234</div>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="primary-button">Add Bank Account</button>
+                <button class="secondary-button">Change Bank Account</button>
+            </div>
+        </div>
+    </span>
+    <div class="settings-container">
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-bell"></i>
+                <span>Notification</span>
+            </div>
+            <div class="toggle-switch">
+                <input type="checkbox" id="notification-toggle">
+                <label for="notification-toggle"></label>
+            </div>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-moon"></i>
+                <span>Dark Mode</span>
+            </div>
+            <div class="toggle-switch">
+                <input type="checkbox" id="darkmode-toggle" checked>
+                <label for="darkmode-toggle"></label>
+            </div>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-star"></i>
+                <span>Rate App</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-share-alt"></i>
+                <span>Share App</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-shield-alt"></i>
+                <span>Privacy Policy</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-file-alt"></i>
+                <span>Terms and Conditions</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-cookie-bite"></i>
+                <span>Cookies Policy</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-envelope"></i>
+                <span>Contact</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-comment"></i>
+                <span>Feedback</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+        <a href="index.html" style="color: white; text-decoration: none;">
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+        </a>
+    </div>
+    <nav class="nav-bar">
+        <a href="user-home.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </div>
+            <span>Home</span>
+        </a>
+        <a href="user-wallet.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                </svg>
+            </div>
+            <span>Wallet</span>
+        </a>
+        <a href="user-transaction.html" class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+            </div>
+            <span>Transactions</span>
+        </a>
+        <a href="user-setting.html" class="nav-item active">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                </svg>
+            </div>
+            <span>Settings</span>
+        </a>
+    </nav>
+
+    <script>
+        const navItems = document.querySelectorAll('.nav-item');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(navItem => navItem.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+        const notificationIcon = document.getElementById('notificationIcon');
+        const notificationDropdown = document.getElementById('notificationDropdown');
+
+        notificationIcon.addEventListener('click', () => {
+            notificationDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!notificationIcon.contains(event.target)) {
+                notificationDropdown.classList.remove('show');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Notification Toggle
+    const notificationToggle = document.getElementById('notification-toggle');
+    notificationToggle.addEventListener('change', function() {
+        if(this.checked) {
+            console.log('Notifications enabled');
+            // Add your notification enable logic here
+        } else {
+            console.log('Notifications disabled');
+            // Add your notification disable logic here
+        }
+    });
+
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkmode-toggle');
+    darkModeToggle.addEventListener('change', function() {
+        if(this.checked) {
+            document.body.classList.add('dark-mode');
+            console.log('Dark mode enabled');
+            // Add your dark mode enable logic here
+        } else {
+            document.body.classList.remove('dark-mode');
+            console.log('Dark mode disabled');
+            // Add your dark mode disable logic here
+        }
+    });
+
+    // Click handlers for other items
+    document.querySelectorAll('.settings-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Ignore clicks on toggle switches
+            if (e.target.closest('.toggle-switch')) return;
+            
+            const action = this.querySelector('.item-left span').textContent;
+            switch(action) {
+                case 'Rate App':
+                    console.log('Rate App clicked');
+                    // Add your rate app logic here
+                    break;
+                case 'Share App':
+                    console.log('Share App clicked');
+                    // Add your share app logic here
+                    break;
+                case 'Privacy Policy':
+                    console.log('Privacy Policy clicked');
+                    // Add your privacy policy logic here
+                    break;
+                case 'Terms and Conditions':
+                    console.log('Terms and Conditions clicked');
+                    // Add your terms and conditions logic here
+                    break;
+                case 'Cookies Policy':
+                    console.log('Cookies Policy clicked');
+                    // Add your cookies policy logic here
+                    break;
+                case 'Contact':
+                    console.log('Contact clicked');
+                    // Add your contact logic here
+                    break;
+                case 'Feedback':
+                    console.log('Feedback clicked');
+                    // Add your feedback logic here
+                    break;
+                case 'Logout':
+                    console.log('Logout clicked');
+                    // Add your logout logic here
+                    break;
+            }
+        });
+    });
+});
+    </script>
+</body>
+</html>
