@@ -38,10 +38,13 @@
 
         .head {
             padding: 20px;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: #141414;
+            border-bottom: 1px solid #141414;
             flex-shrink: 0;
         }
+        a {
+    text-decoration: none;
+}
 
         .head h1 {
             color: var(--text-primary);
@@ -54,7 +57,8 @@
             align-items: center;
             gap: 10px;
             color: var(--text-secondary);
-            flex-direction: column;
+            position: relative;
+            top: 20px;
         }
 
         .main-content {
@@ -138,7 +142,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px;
-            background-color: #1e1e1e;
+            background-color: #141414;
             color: #ffffff;
         }
 
@@ -435,6 +439,7 @@ body {
 
         <div class="main-content">
             <div class="stats-grid">
+                <a href="daily-spent.html">
                 <div class="stat-card">
                     <div>
                         <div class="progress-ring" style="--progress: 65%"></div>
@@ -442,6 +447,8 @@ body {
                     </div>
                     <h3>₹1,200</h3>
                 </div>
+                </a>
+                <a href="weekly-spent.html">
                 <div class="stat-card">
                     <div>
                         <div class="progress-ring" style="--progress: 45%"></div>
@@ -449,6 +456,8 @@ body {
                     </div>
                     <h3>₹8,400</h3>
                 </div>
+                </a>
+                <a href="monthly-spent.html">
                 <div class="stat-card">
                     <div>
                         <div class="progress-ring" style="--progress: 80%"></div>
@@ -456,6 +465,7 @@ body {
                     </div>
                     <h3>₹32,000</h3>
                 </div>
+                </a>
             </div>
 
             <div class="card-section">
