@@ -18,6 +18,11 @@
             padding: 20px;
             padding-bottom: 80px;
         }
+
+        a {
+    text-decoration: none;
+}
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -288,6 +293,107 @@
             position: relative;
             top: 20px;
         }
+
+        .settings-container {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    top: 20px;
+}
+
+.settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #333;
+}
+
+.settings-item:last-child {
+    border-bottom: none;
+}
+
+.item-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.item-left i {
+    font-size: 20px;
+    width: 24px;
+    color: #888;
+}
+
+.item-left span {
+    font-size: 16px;
+}
+
+.arrow {
+    color: #888;
+    font-size: 14px;
+}
+
+/* Toggle Switch Styles */
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #484848;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-switch label:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + label {
+    background-color: #6366F1;
+}
+
+.toggle-switch input:checked + label:before {
+    transform: translateX(24px);
+}
+
+/* Hover Effects */
+.settings-item:hover {
+    background-color: #242424;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Active/Pressed State */
+.settings-item:active {
+    background-color: #2a2a2a;
+}
     </style>
 </head>
 <body>
@@ -356,6 +462,94 @@
             </div>
         </div>
     </span>
+    <div class="settings-container">
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-bell"></i>
+                <span>Notification</span>
+            </div>
+            <div class="toggle-switch">
+                <input type="checkbox" id="notification-toggle">
+                <label for="notification-toggle"></label>
+            </div>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-moon"></i>
+                <span>Dark Mode</span>
+            </div>
+            <div class="toggle-switch">
+                <input type="checkbox" id="darkmode-toggle" checked>
+                <label for="darkmode-toggle"></label>
+            </div>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-star"></i>
+                <span>Rate App</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-share-alt"></i>
+                <span>Share App</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-shield-alt"></i>
+                <span>Privacy Policy</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-file-alt"></i>
+                <span>Terms and Conditions</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-cookie-bite"></i>
+                <span>Cookies Policy</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-envelope"></i>
+                <span>Contact</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+    
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-comment"></i>
+                <span>Feedback</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+        <a href="index.html" style="color: white; text-decoration: none;">
+        <div class="settings-item">
+            <div class="item-left">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </div>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
+        </a>
+    </div>
     <nav class="nav-bar">
         <a href="user-home.html" class="nav-item">
             <div class="nav-icon">
@@ -413,6 +607,78 @@
                 notificationDropdown.classList.remove('show');
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Notification Toggle
+    const notificationToggle = document.getElementById('notification-toggle');
+    notificationToggle.addEventListener('change', function() {
+        if(this.checked) {
+            console.log('Notifications enabled');
+            // Add your notification enable logic here
+        } else {
+            console.log('Notifications disabled');
+            // Add your notification disable logic here
+        }
+    });
+
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkmode-toggle');
+    darkModeToggle.addEventListener('change', function() {
+        if(this.checked) {
+            document.body.classList.add('dark-mode');
+            console.log('Dark mode enabled');
+            // Add your dark mode enable logic here
+        } else {
+            document.body.classList.remove('dark-mode');
+            console.log('Dark mode disabled');
+            // Add your dark mode disable logic here
+        }
+    });
+
+    // Click handlers for other items
+    document.querySelectorAll('.settings-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Ignore clicks on toggle switches
+            if (e.target.closest('.toggle-switch')) return;
+            
+            const action = this.querySelector('.item-left span').textContent;
+            switch(action) {
+                case 'Rate App':
+                    console.log('Rate App clicked');
+                    // Add your rate app logic here
+                    break;
+                case 'Share App':
+                    console.log('Share App clicked');
+                    // Add your share app logic here
+                    break;
+                case 'Privacy Policy':
+                    console.log('Privacy Policy clicked');
+                    // Add your privacy policy logic here
+                    break;
+                case 'Terms and Conditions':
+                    console.log('Terms and Conditions clicked');
+                    // Add your terms and conditions logic here
+                    break;
+                case 'Cookies Policy':
+                    console.log('Cookies Policy clicked');
+                    // Add your cookies policy logic here
+                    break;
+                case 'Contact':
+                    console.log('Contact clicked');
+                    // Add your contact logic here
+                    break;
+                case 'Feedback':
+                    console.log('Feedback clicked');
+                    // Add your feedback logic here
+                    break;
+                case 'Logout':
+                    console.log('Logout clicked');
+                    // Add your logout logic here
+                    break;
+            }
+        });
+    });
+});
     </script>
 </body>
 </html>
