@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RashtraPay Barcode Card Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            background: linear-gradient(45deg, #FF9933, #ffffff, #138808);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .content {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+            
+            body {
+                padding: 20px;
+            }
+        }
+
+        .form-section {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #3d3d3d;
+            border: 1px solid #4a4a4a;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        .preview-section {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .card {
+            aspect-ratio: 1.586;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        img{
+            width: 100%;
+        }
+
+        .flag-stripe {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                transparent 0%,
+                #FF9933 25%,
+                #ffffff 50%,
+                #138808 75%
+            );
+            transform: skewX(-20deg) translateX(20%);
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-weight: bold;
+        }
+
+        .logo span:first-child {
+            color: #FF9933;
+        }
+
+        .logo span:last-child {
+            color: #138808;
+        }
+
+        .monuments {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><path d="M0,150 L50,140 L100,150 L150,145 L200,150 L250,140 L300,150 L350,145 L400,150 L450,140 L500,150 L550,145 L600,150 L650,140 L700,150 L750,145 L800,150 L850,140 L900,150 L950,145 L1000,150 L1050,140 L1100,150 L1150,145 L1200,150 L1200,200 L0,200 Z" fill="%23001B3D"/></svg>');
+            background-size: cover;
+        }
+
+        .barcode-container {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 85%;
+            text-align: center;
+        }
+
+        .barcode-container canvas {
+            height: 30px;
+            position: relative;
+            max-width: 100%;
+            right: 60px;
+            top: 50px;
+        }
+
+        #cardName {
+            margin-top: 20px;
+            text-align: center;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-weight: bold;
+            color: #001B3D;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+            position: relative;
+            right: 55px;
+            bottom: 25px;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RashtraPay Barcode Card Generator</h1>
+        <div class="content">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="uniqueId">Unique ID</label>
+                    <input type="text" id="uniqueId" placeholder="Enter a unique ID">
+                </div>
+                <div class="buttons">
+                    <button onclick="updateCard()">Preview</button>
+                    <button onclick="downloadCard()">Download Card</button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="card" id="cardPreview">
+                    <img src="RashtraPay.png">
+                    <div class="barcode-container" id="barcodeContainer">
+                        <canvas id="barcodeCanvas"></canvas>
+                        <div id="cardName"></div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script>
+        function updateCard() {
+            const name = document.getElementById('name').value;
+            const uniqueId = document.getElementById('uniqueId').value;
+
+            // Update the name on the card
+            document.getElementById('cardName').textContent = name;
+
+            // Generate and display the barcode
+            const barcodeCanvas = document.getElementById('barcodeCanvas');
+            if (uniqueId) {
+                JsBarcode(barcodeCanvas, uniqueId, {
+                    format: 'CODE128',
+                    lineColor: '#001B3D',
+                    width: 2,
+                    height: 50,
+                    displayValue: false
+                });
+            } else {
+                barcodeCanvas.getContext('2d').clearRect(0, 0, barcodeCanvas.width, barcodeCanvas.height);
+            }
+        }
+
+        function downloadCard() {
+            const card = document.getElementById('cardPreview');
+            html2canvas(card, { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'rashtrapay-card.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>
