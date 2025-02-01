@@ -320,7 +320,7 @@
 <body>
     <!-- Previous body content remains the same -->
     <header class="header">
-        <a href="#" class="logo">RastraPay</a>
+        <a href="#" class="logo">RashtraPay</a>
     <div class="notification-icon" id="notificationIcon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
@@ -354,28 +354,13 @@
     </div>
     </header>
     <div class="wallet-header">
-        <div class="balance">₹5,000</div>
+        <div class="balance">₹0.00</div>
         <div class="balance-label">Available Balance</div>
     </div>
-
-    <button class="recharge-button">Recharge Wallet</button>
-
-    <div class="amount-options">
-        <button class="amount-option">₹100</button>
-        <button class="amount-option selected">₹200</button>
     </div>
-
-    <input type="text" class="input-field" placeholder="Name">
-    <input type="text" class="input-field" placeholder="Card number">
-
-    <div class="card-details">
-        <input type="text" class="input-field" placeholder="Exp">
-        <input type="text" class="input-field" placeholder="CVV">
-        <input type="text" class="input-field" placeholder="Zip">
-    </div>
-
-    <button class="recharge-button">Proceed to Recharge</button>
-
+    <a href="http://localhost:4000/">
+    <button class="recharge-button" >Proceed to Recharge</button>
+    </a>
     <div class="auto-recharge">
         <span>Auto-Recharge</span>
         <div class="toggle"></div>
@@ -430,40 +415,83 @@
 
 
     <script>
-        const toggle = document.querySelector('.toggle');
-        const amountOptions = document.querySelectorAll('.amount-option');
-        const navItems = document.querySelectorAll('.nav-item');
+// Add this function to get current balance
+async function getCurrentBalance() {
+    try {
+        const response = await fetch('/api/balance');
+        const data = await response.json();
+        document.querySelector('.balance').textContent = `₹${data.balance}`;
+    } catch (error) {
+        console.error('Error fetching balance:', error);
+    }
+}
 
-        toggle.addEventListener('click', () => {
-            toggle.classList.toggle('active');
+// Modify your handleRecharge function
+async function handleRecharge() {
+    const selectedAmount = document.querySelector('.amount-option.selected').dataset.amount;
+    
+    try {
+        const response = await fetch('/api/create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ amount: parseInt(selectedAmount) })
         });
+        
+        const order = await response.json();
 
-        amountOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                amountOptions.forEach(opt => opt.classList.remove('selected'));
-                option.classList.add('selected');
-            });
-        });
+        const options = {
+            key: 'YOUR_RAZORPAY_KEY_ID',
+            amount: order.amount,
+            currency: 'INR',
+            name: 'RashtraPay',
+            description: 'Wallet Recharge',
+            order_id: order.id,
+            handler: async function(response) {
+                try {
+                    const verifyResponse = await fetch('/api/verify-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            ...response,
+                            amount: selectedAmount
+                        })
+                    });
 
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                navItems.forEach(navItem => navItem.classList.remove('active'));
-                item.classList.add('active');
-            });
-        });
-        const notificationIcon = document.getElementById('notificationIcon');
-        const notificationDropdown = document.getElementById('notificationDropdown');
-
-        notificationIcon.addEventListener('click', () => {
-            notificationDropdown.classList.toggle('show');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (event) => {
-            if (!notificationIcon.contains(event.target)) {
-                notificationDropdown.classList.remove('show');
+                    const data = await verifyResponse.json();
+                    
+                    if (data.success) {
+                        // Update the balance display
+                        document.querySelector('.balance').textContent = `₹${data.newBalance}`;
+                        alert('Recharge successful!');
+                    } else {
+                        alert('Payment verification failed');
+                    }
+                } catch (error) {
+                    alert('Error verifying payment');
+                    console.error(error);
+                }
+            },
+            theme: {
+                color: '#45a049'
             }
-        });
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+
+    } catch (error) {
+        alert('Error initiating payment');
+        console.error(error);
+    }
+}
+
+// Load initial balance when page loads
+document.addEventListener('DOMContentLoaded', getCurrentBalance);
+
     </script>
 </body>
 </html>
