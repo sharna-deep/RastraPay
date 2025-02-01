@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Wallet</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.wallet-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 400px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.balance-container {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#walletBalance {
+    font-size: 24px;
+    color: #28a745;
+    font-weight: bold;
+}
+
+.recharge-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+    </style>
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <div class="wallet-container">
+        <h2>Digital Wallet</h2>
+        <div class="balance-container">
+            <h3>Current Balance</h3>
+            <p id="walletBalance" class="balance">₹0.00</p>
+        </div>
+        <div class="recharge-container">
+            <h3>Recharge Wallet</h3>
+            <input type="number" id="rechargeAmount" placeholder="Enter amount">
+            <button onclick="handleRecharge()">Recharge Now</button>
+        </div>
+    </div>
+    <script>
+let walletBalance = 0;
+
+function updateWalletBalance(amount) {
+    walletBalance += amount;
+    document.getElementById('walletBalance').textContent = `₹${walletBalance.toFixed(2)}`;
+}
+
+async function handleRecharge() {
+    const amount = document.getElementById('rechargeAmount').value;
+    
+    if (amount < 1) {
+        alert('Please enter a valid amount');
+        return;
+    }
+
+    try {
+        // Create order on server
+        const response = await fetch('/api/create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ amount: parseFloat(amount) })
+        });
+        
+        const order = await response.json();
+
+        // Initialize Razorpay payment
+        const options = {
+            key: 'rzp_live_zH5VVk1UUtT9CV', // Replace with your key
+            amount: order.amount,
+            currency: 'INR',
+            name: 'Your Company Name',
+            description: 'Wallet Recharge',
+            order_id: order.id,
+            handler: async function(response) {
+                try {
+                    // Verify payment
+                    const verifyResponse = await fetch('/api/verify-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(response)
+                    });
+
+                    const data = await verifyResponse.json();
+                    
+                    if (data.success) {
+                        updateWalletBalance(parseFloat(amount));
+                        alert('Recharge successful!');
+                    } else {
+                        alert('Payment verification failed');
+                    }
+                } catch (error) {
+                    alert('Error verifying payment');
+                    console.error(error);
+                }
+            },
+            prefill: {
+                name: 'User Name',
+                email: 'user@example.com',
+                contact: '9999999999'
+            },
+            theme: {
+                color: '#007bff'
+            }
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+
+    } catch (error) {
+        alert('Error initiating payment');
+        console.error(error);
+    }
+    
+}
+
+
+    </script>
+</body>
+</html>
