@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up for RastraPay</title>
+    <title>Sign Up for RashtraPay</title>
     <style>
         body {
             margin: 0;
@@ -91,10 +91,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Sign Up for RastraPay</h1>
-        <p class="subtitle">Create your account to start using RastraPay</p>
+        <h1>Sign Up for RashtraPay</h1>
+        <p class="subtitle">Create your account to start using RashtraPay</p>
         
-        <form action="process_signup.php" method="POST">
+        <form action="user-setting.html" id="signupForm">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" placeholder="Enter your name" required>
@@ -111,8 +111,8 @@
             </div>
 
             <div class="form-group">
-                <label for="card_id">Unique Card ID</label>
-                <input type="text" id="card_id" name="card_id" placeholder="Enter your unique card ID" required>
+                <label for="Password">Password</label>
+                <input type="text" id="Password" name="Password" placeholder="Enter your Password" required>
             </div>
 
             <div class="form-group">
@@ -132,9 +132,23 @@
                     </div>
                 </div>
             </div>
-
-            <button type="submit">Sign Up</button>
         </form>
+        <button type="submit" onclick="signup()">Sign Up</button>
     </div>
+    <script>
+        function signup() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+    
+            if (name && email) {
+                const uniqueID = 'ID-' + Date.now();
+                localStorage.setItem('uniqueID', uniqueID);
+                window.location.href = 'user-home.html';
+            } else {
+                alert('Please fill in all fields.');
+            }
+        }
+
+    </script>
 </body>
 </html>
