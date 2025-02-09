@@ -94,7 +94,7 @@
         <h1>Sign Up for RashtraPay</h1>
         <p class="subtitle">Create your account to start using RashtraPay</p>
         
-        <form action="user-setting.html" id="signupForm">
+        <form action="process_signup.php" id="signupForm" method="post">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" placeholder="Enter your name" required>
@@ -136,19 +136,23 @@
         <button type="submit" onclick="signup()">Sign Up</button>
     </div>
     <script>
-        function signup() {
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-    
-            if (name && email) {
-                const uniqueID = 'ID-' + Date.now();
-                localStorage.setItem('uniqueID', uniqueID);
-                window.location.href = 'user-home.html';
-            } else {
-                alert('Please fill in all fields.');
-            }
-        }
+function signup() {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
 
+    if (name && email) {
+        // Generate a 12-digit unique ID
+        const uniqueID = 'ID-' + Math.floor(100000 + Math.random() * 900000); // Random 6 digits
+        const timestamp = Date.now().toString().slice(-6); // Last 6 digits of the timestamp
+
+        const completeUniqueID = uniqueID + timestamp; // Combine the two
+
+        localStorage.setItem('uniqueID', completeUniqueID);
+        window.location.href = 'user-home.html';
+    } else {
+        alert('Please fill in all fields.');
+    }
+}
     </script>
 </body>
 </html>
