@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RashtraPay</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +20,6 @@
             position: relative;
         }
 
-        /* Previous styles remain the same */
         .wallet-header {
             background: url('https://www.shutterstock.com/shutterstock/videos/1065812323/thumb/6.jpg?ip=x480') center/cover;
             height: 200px;
@@ -43,15 +43,13 @@
         }
 
         a {
-    text-decoration: none;
-}
-
+            text-decoration: none;
+        }
 
         .logo {
             font-size: 32px;
             font-weight: 700;
             color: #ffffff;
-            text-decoration: none;
         }
 
         .notification-icon {
@@ -156,76 +154,49 @@
             color: #888;
         }
 
-        .balance {
-            font-size: 2.5rem;
+        .balance-card {
+            background-color: #000;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-amount {
+            font-size: 32px;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin: 10px 0;
         }
 
         .balance-label {
-            font-size: 1rem;
-            opacity: 0.8;
+            color: #888;
         }
 
         .recharge-button {
-            background-color: #45a049;
+            background-color: #4CAF50;
             color: white;
+            padding: 15px;
             border: none;
-            padding: 16px;
-            border-radius: 8px;
-            width: 100%;
-            font-size: 1rem;
-            margin: 20px 0;
+            border-radius: 10px;
+            width: calc(100% - 40px);
+            margin: 20px;
+            font-size: 16px;
             cursor: pointer;
-        }
-
-        .amount-options {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .amount-option {
-            flex: 1;
-            padding: 16px;
-            background-color: #141414;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .amount-option.selected {
-            background-color: #45a049;
-        }
-
-        .input-field {
-            background-color: #1a1a1a;
-            border: none;
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            width: 100%;
-            color: white;
-            font-size: 1rem;
-        }
-
-        .card-details {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .card-details input {
-            flex: 1;
         }
 
         .auto-recharge {
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 20px 0;
+        }
+
+        .balance-info {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            color: #888;
         }
 
         .toggle {
@@ -254,19 +225,8 @@
             background-color: #45a049;
         }
 
-        .recharge-info {
-            margin-top: 20px;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            opacity: 0.8;
-        }
-
-        /* New Navigation Bar Styles */
-        .nav-bar {
+ /* New Navigation Bar Styles */
+ .nav-bar {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -315,69 +275,108 @@
             height: 20px;
             fill: #888;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: 50px 20px;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 16px;
+        }
+
+        .modal button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
-    <!-- Previous body content remains the same -->
     <header class="header">
         <a href="#" class="logo">RashtraPay</a>
-    <div class="notification-icon" id="notificationIcon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
-        </svg>
-        <span class="notification-badge">3</span>
-        <div class="notification-dropdown" id="notificationDropdown">
-            <div class="notification-header">
-                <span class="notification-title">Notifications</span>
-            </div>
-            <div class="notification-list">
-                <div class="notification-item">
-                    <div class="notification-content">
-                        <div class="notification-message">New payment received from John Doe</div>
-                        <div class="notification-time">2 minutes ago</div>
-                    </div>
+        <div class="notification-icon" id="notificationIcon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
+            </svg>
+            <span class="notification-badge">3</span>
+            <div class="notification-dropdown" id="notificationDropdown">
+                <div class="notification-header">
+                    <span class="notification-title">Notifications</span>
                 </div>
-                <div class="notification-item">
-                    <div class="notification-content">
-                        <div class="notification-message">Your account has been verified</div>
-                        <div class="notification-time">1 hour ago</div>
+                <div class="notification-list">
+                    <div class="notification-item">
+                        <div class="notification-content">
+                            <div class="notification-message">New payment received from John Doe</div>
+                            <div class="notification-time">2 minutes ago</div>
+                        </div>
                     </div>
-                </div>
-                <div class="notification-item">
-                    <div class="notification-content">
-                        <div class="notification-message">System maintenance scheduled for tomorrow</div>
-                        <div class="notification-time">2 hours ago</div>
+                    <div class="notification-item">
+                        <div class="notification-content">
+                            <div class="notification-message">Your account has been verified</div>
+                            <div class="notification-time">1 hour ago</div>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-content">
+                            <div class="notification-message">System maintenance scheduled for tomorrow</div>
+                            <div class="notification-time">2 hours ago</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </header>
+    
     <div class="wallet-header">
-        <div class="balance">₹0.00</div>
+        <div class="balance" id="currentBalance">₹0.00</div>
         <div class="balance-label">Available Balance</div>
     </div>
-    </div>
-    <a href="http://localhost:4000/">
-    <button class="recharge-button" >Proceed to Recharge</button>
-    </a>
+
+    <button class="recharge-button" onclick="showRechargeModal()">Proceed to Recharge</button>
+
     <div class="auto-recharge">
         <span>Auto-Recharge</span>
         <div class="toggle"></div>
     </div>
 
-    <div class="recharge-info">
-        <div class="info-row">
-            <span>Minimum Balance</span>
-            <span>₹100</span>
-        </div>
-        <div class="info-row">
-            <span>Recharge Amount</span>
-            <span>₹200</span>
-        </div>
+    <div class="balance-info">
+        <span>Minimum Balance</span>
+        <span>₹100</span>
     </div>
 
-    <!-- New Navigation Bar -->
+    <div class="balance-info">
+        <span>Recharge Amount</span>
+        <span>₹200</span>
+    </div>
+
     <nav class="nav-bar">
         <a href="user-home.html" class="nav-item">
             <div class="nav-icon">
@@ -413,85 +412,115 @@
         </a>
     </nav>
 
+    <div id="rechargeModal" class="modal">
+        <div class="modal-content">
+            <h2>Digital Wallet</h2>
+            <div class="balance-info">
+                <span>Current Balance</span>
+                <span>₹<span id="modalBalance">0.00</span></span>
+            </div>
+            <h3>Recharge Wallet</h3>
+            <input type="number" id="rechargeAmount" placeholder="Enter amount" min="1" step="1" required>
+            <button onclick="initiateRecharge()">Recharge Now</button>
+            <button onclick="hideRechargeModal()" style="background-color: #666;">Cancel</button>
+        </div>
+    </div>
 
     <script>
-// Add this function to get current balance
-async function getCurrentBalance() {
-    try {
-        const response = await fetch('/api/balance');
-        const data = await response.json();
-        document.querySelector('.balance').textContent = `₹${data.balance}`;
-    } catch (error) {
-        console.error('Error fetching balance:', error);
-    }
-}
+        let currentBalance = 0;
 
-// Modify your handleRecharge function
-async function handleRecharge() {
-    const selectedAmount = document.querySelector('.amount-option.selected').dataset.amount;
-    
-    try {
-        const response = await fetch('/api/create-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ amount: parseInt(selectedAmount) })
+        document.getElementById('notificationIcon').addEventListener('click', function() {
+            document.getElementById('notificationDropdown').classList.toggle('show');
         });
-        
-        const order = await response.json();
 
-        const options = {
-            key: 'YOUR_RAZORPAY_KEY_ID',
-            amount: order.amount,
-            currency: 'INR',
-            name: 'RashtraPay',
-            description: 'Wallet Recharge',
-            order_id: order.id,
-            handler: async function(response) {
-                try {
-                    const verifyResponse = await fetch('/api/verify-payment', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            ...response,
-                            amount: selectedAmount
-                        })
-                    });
-
-                    const data = await verifyResponse.json();
-                    
-                    if (data.success) {
-                        // Update the balance display
-                        document.querySelector('.balance').textContent = `₹${data.newBalance}`;
-                        alert('Recharge successful!');
-                    } else {
-                        alert('Payment verification failed');
-                    }
-                } catch (error) {
-                    alert('Error verifying payment');
-                    console.error(error);
-                }
-            },
-            theme: {
-                color: '#45a049'
+        window.addEventListener('click', function(event) {
+            if (!event.target.closest('.notification-icon')) {
+                document.getElementById('notificationDropdown').classList.remove('show');
             }
-        };
+        });
 
-        const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
+        function showRechargeModal() {
+            document.getElementById('rechargeModal').style.display = 'block';
+            document.getElementById('modalBalance').textContent = currentBalance.toFixed(2);
+        }
 
-    } catch (error) {
-        alert('Error initiating payment');
-        console.error(error);
-    }
-}
+        function hideRechargeModal() {
+            document.getElementById('rechargeModal').style.display = 'none';
+        }
 
-// Load initial balance when page loads
-document.addEventListener('DOMContentLoaded', getCurrentBalance);
+        function updateWalletBalance(amount) {
+            currentBalance += amount;
+            document.getElementById('currentBalance').textContent = `₹${currentBalance.toFixed(2)}`;
+            document.getElementById('modalBalance').textContent = currentBalance.toFixed(2);
+        }
 
+        async function initiateRecharge() {
+            const amount = document.getElementById('rechargeAmount').value;
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            const options = {
+                key: 'rzp_live_zH5VVk1UUtT9CV', // Replace with your actual Razorpay key
+                amount: amount * 100, // Razorpay takes amount in paise
+                currency: 'INR',
+                name: 'RashtraPay',
+                description: 'Wallet Recharge',
+                handler: function(response) {
+                    handlePaymentSuccess(response, amount);
+                },
+                prefill: {
+                    name: 'User Name',
+                    email: 'user@example.com',
+                    contact: '9999999999'
+                },
+                theme: {
+                    color: '#4CAF50'
+                }
+            };
+
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
+            hideRechargeModal();
+        }
+
+        function handlePaymentSuccess(response, amount) {
+            updateWalletBalance(parseFloat(amount));
+            alert('Payment Successful! Payment ID: ' + response.razorpay_payment_id);
+            verifyPayment(response, amount);
+        }
+
+        async function verifyPayment(paymentResponse, amount) {
+            try {
+                const response = await fetch('/api/verify-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        payment_id: paymentResponse.razorpay_payment_id,
+                        order_id: paymentResponse.razorpay_order_id,
+                        signature: paymentResponse.razorpay_signature,
+                        amount: amount
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    console.log('Payment verified successfully');
+                } else {
+                    alert('Payment verification failed. Please contact support.');
+                }
+            } catch (error) {
+                console.error('Error verifying payment:', error);
+                alert('Error verifying payment. Please contact support.');
+            }
+        }
+
+        document.querySelector('.toggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
     </script>
 </body>
 </html>
